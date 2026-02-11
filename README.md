@@ -28,7 +28,9 @@ Our model architecture leverages the structural depth of LaBSE to capture both s
 * **Weighted Layer Aggregation**: We extract hidden states from the **last 4 layers** of the encoder.
 * **Learnable Parameters**: These layers are weighted using learnable parameters ($w_1, w_2, w_3, w_4$), initialized with small values to let the model learn the optimal layer importance.
 * **Hybrid Multi-Layer Pooling**: For each layer, we compute a combined representation:
-  $$\text{Layer\_Output} = \text{Mean Pooling} + \lambda(\text{Attention Pooling})$$
+  
+$$\text{Layer Output} = \text{Mean Pooling} + \lambda \times (\text{Attention Pooling})$$
+
   This hybrid approach ensures the model captures both the general sentence context and specific high-impact tokens.
 
 ---
