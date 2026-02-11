@@ -26,7 +26,7 @@ We train the final LaBSE-based classifier in three distinct stages, resetting th
 Our model architecture leverages the structural depth of LaBSE to capture both syntactic and semantic features:
 
 * **Weighted Layer Aggregation**: We extract hidden states from the **last 4 layers** of the encoder.
-* **Learnable Parameters**: These layers are weighted using learnable parameters ($w_1, w_2, w_3, w_4$), initialized with small values to let the model learn the optimal layer importance.
+* **Learnable Parameters**: These layers are weighted using learnable parameters ($w_1, w_2, w_3, w_4$), initialized with small values of ($w_1, w_2, w_3$) to let the model learn the optimal layer importance.
 * **Hybrid Multi-Layer Pooling**: For each layer, we compute a combined representation:
   
 $$\text{Layer Output} = \text{Mean Pooling} + \lambda \times (\text{Attention Pooling})$$
