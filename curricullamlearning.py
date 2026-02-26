@@ -21,6 +21,8 @@ from datasets import Dataset
 from transformers import AutoTokenizer, AutoModel, DataCollatorWithPadding, get_linear_schedule_with_warmup
 from sklearn.metrics import f1_score, accuracy_score
 from tqdm.auto import tqdm
+import wandb
+
 
 from utils.data_utils import ensure_extracted, load_multilingual_data, get_difficulty_scores
 
@@ -124,36 +126,7 @@ optimizer_groups = [
 
 optimizer = torch.optim.AdamW(optimizer_groups)
 
-# (multilingual data loading is handled via utils.load_multilingual_data above)
 
-def tokenize_fn(batch):
-      return tokenizer(batch["text"], truncation=True, max_length=256)
-cols_to_remove = [c for c in train_dataset.column_names if c not in ["polarization"]]
-train_dataset = train_dataset.map(tokenize_fn, batched=True, remove_columns=cols_to_remove)
-test_dataset= test_dataset.map(tokenize_fn, batched=True, remove_columns=cols_to_remove)
-
-train_dataset = train_dataset.rename_column("polarization", "labels")
-test_dataset= test_dataset.rename_column("polarization", "labels")
-
-
-
-
-
-
-train_dataset.set_format("torch")
-test_dataset.set_format("torch")
-
-
-
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-
-data_collator = DataCollatorWithPadding(tokenizer)
-
-
-train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, collate_fn=data_collator)
-test_loader = DataLoader(test_dataset, batch_size=32, collate_fn=data_collator)
-
-optimizer = torch.optim.AdamW(optimizer_groups,betas=(0.9,0.98),weight_decay=0.01)
 from transformers import AutoTokenizer, AutoModel, DataCollatorWithPadding, get_cosine_schedule_with_warmup
 
 num_epochs = 1
@@ -168,7 +141,7 @@ scheduler = get_cosine_schedule_with_warmup(
 
 print("Scheduler: warmup + cosine decay to 0 (annealing).")
 
-len(train_loader)
+
 
 import wandb
 import torch # Import torch to use torch.device
@@ -182,13 +155,7 @@ l1_lambda = 0
 MAX_LENGTH = 128
 BATCH_SIZE = 16
 LEARNING_RATE = 2e-5
-wandb.init(project="polarization-classification", config={
-    "learning_rate": LEARNING_RATE,
-    "batch_size": BATCH_SIZE,
-    "epochs": EPOCHS,
-    "model_name": MODEL_NAME,
-    "max_length": MAX_LENGTH
-})
+
 
 # Optional: Watch the model for gradients and parameters
 criterion = nn.CrossEntropyLoss()
@@ -245,18 +212,12 @@ for epoch in range(EPOCHS):
     acc = accuracy_score(all_labels, all_preds)
 
     # Log epoch-level metrics to wandb
-    wandb.log({
-        "train/avg_loss": avg_train_loss,
-        "val/avg_loss": avg_val_loss,
-        "val/f1_score": f1,
-        "val/accuracy": acc,
-        "epoch": epoch
-    })
+    
 
     print(f"Epoch {epoch+1}: Train Loss: {avg_train_loss:.4f} | Val Loss: {avg_val_loss:.4f} | F1: {f1:.4f} | Acc: {acc:.4f}")
 
 
-wandb.finish()
+
 
 import numpy as np
 import zipfile
