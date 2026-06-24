@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+
+# Artifacts
+artifacts/
+outputs/
+checkpoints/
+wandb/
+*.pt
+*.pth
+*.ckpt
+
+# Data (keep layout, ignore archives and processed files)
+data/**/processed/
+data/**/raw/*.zip
+data/**/curriculum/*.csv
+data/**/curriculum/*.zip
+*.csv
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env

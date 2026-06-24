@@ -1,0 +1,7 @@
+model_name: setu4993/LaBSE
+epochs: 3
+batch_size: 32
+max_length: 128
+num_layers: 6
+freeze_layers: 2
+output_dir: artifacts/task1/labse

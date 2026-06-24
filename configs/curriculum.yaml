@@ -1,0 +1,5 @@
+model_name: FacebookAI/xlm-roberta-base
+epochs: 1
+batch_size: 16
+max_length: 256
+output_dir: data/task1/curriculum
